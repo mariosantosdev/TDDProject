@@ -68,7 +68,11 @@ class User {
           .json({ messageError: "Email or password is invalid." });
       }
 
-      const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "48h" });
+      const token = jwt.sign(
+        { email, name: user.name, id: user._id },
+        JWT_SECRET,
+        { expiresIn: "48h" }
+      );
 
       res.status(200).json({ token });
     } catch (error) {
