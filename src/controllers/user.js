@@ -60,6 +60,14 @@ class User {
           .json({ messageError: 'Field "Password" is missing.' });
       }
 
+      const user = await UserModel.findOne({ email });
+
+      if (!user) {
+        return res
+          .status(403)
+          .json({ messageError: "Email or password is invalid." });
+      }
+
       const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "48h" });
 
       res.status(200).json({ token });

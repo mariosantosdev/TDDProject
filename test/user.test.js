@@ -138,4 +138,18 @@ describe("SignIn User", () => {
         throw new Error(error);
       });
   });
+
+  it("Should prevent sign in with invalid 'email'.", () => {
+    return request
+      .post("/auth")
+      .send({ email: "email@invalid.com", password: mainUser.password })
+      .then((res) => {
+        expect(res.statusCode).toBe(403);
+        expect(res.body.messageError).toEqual("Email or password is invalid.");
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  });
+
 });
