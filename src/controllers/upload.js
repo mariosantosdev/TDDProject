@@ -15,7 +15,7 @@ function writeFileInFolder(file) {
         const filename = Date.now() + "_" + originalname;
         const path = `${DestinationFolder}/${filename}`;
         fs.writeFileSync(path, buffer);
-        resolve(`uploads/${filename}`);
+        resolve(filename);
       });
     } catch (error) {
       reject(error);
@@ -30,9 +30,13 @@ class UploadController {
         return res.status(400).json({ messageError: "File is missing." });
       }
 
-      const path = await writeFileInFolder(req.file);
+      const filename = await writeFileInFolder(req.file);
 
-      const image = new UploadModel({ userId: req.userId, link: path });
+      const image = new UploadModel({
+        userId: req.userId,
+        link: `uploads/${filename}`,
+        filename,
+      });
       image.save();
 
       res.status(200).json({ image });

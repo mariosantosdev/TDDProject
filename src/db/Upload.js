@@ -6,6 +6,11 @@ const upload = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  filename: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   link: String,
 });
 
