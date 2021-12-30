@@ -80,8 +80,21 @@ describe("Delete Images", () => {
   it("Should delete an image with success.", () => {
     return request
       .delete(`/upload/${uploadPhotoId}`)
+      .auth(token, { type: "bearer" })
       .then((res) => {
         expect(res.statusCode).toBe(200);
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  });
+
+  it("Should recuse delete an image without JWT.", () => {
+    return request
+      .delete(`/upload/${uploadPhotoId}`)
+      .then((res) => {
+        expect(res.statusCode).toBe(403);
+        expect(res.body.messageError).toBe("Token is missing.");
       })
       .catch((err) => {
         throw new Error(err);

@@ -34,6 +34,6 @@ app.post(
   uploadController.upload
 );
 
-app.delete("/upload/:id", uploadController.delete);
+app.delete("/upload/:id", authMiddleware.handle, uploadController.delete);
 
 module.exports = app;
