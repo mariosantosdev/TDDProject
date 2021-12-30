@@ -6,7 +6,7 @@ const request = supertest(app);
 
 describe("SignUp User", () => {
   it("Should sign up user with success", () => {
-    let name = faker.name;
+    let name = faker.name.firstName();
     let email = faker.internet.email();
     let password = faker.internet.password();
     let user = { name, email, password };
