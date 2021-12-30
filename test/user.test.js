@@ -112,4 +112,30 @@ describe("SignIn User", () => {
         throw new Error(error);
       });
   });
+
+  it("Should prevent sign in with empty 'email' field.", () => {
+    return request
+      .post("/auth")
+      .send({ password: mainUser.password })
+      .then((res) => {
+        expect(res.statusCode).toBe(400);
+        expect(res.body.messageError).toBeDefined();
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  });
+
+  it("Should prevent sign in with empty 'password' field.", () => {
+    return request
+      .post("/auth")
+      .send({ email: mainUser.email })
+      .then((res) => {
+        expect(res.statusCode).toBe(400);
+        expect(res.body.messageError).toBeDefined();
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  });
 });

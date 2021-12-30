@@ -48,6 +48,18 @@ class User {
     try {
       const { email, password } = req.body;
 
+      if (!email || email === "") {
+        return res
+          .status(400)
+          .json({ messageError: 'Field "Email" is missing.' });
+      }
+
+      if (!password || password === "") {
+        return res
+          .status(400)
+          .json({ messageError: 'Field "Password" is missing.' });
+      }
+
       const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "48h" });
 
       res.status(200).json({ token });
