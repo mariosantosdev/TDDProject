@@ -10,7 +10,7 @@ const mainUser = {
 };
 
 let token = "kdaskda";
-let photoURL;
+let uploadPhotoId;
 
 beforeAll(async () => {
   try {
@@ -42,7 +42,7 @@ describe("Upload Images", () => {
       .then((res) => {
         expect(res.statusCode).toBe(200);
         expect(res.body.image.link).toBeDefined();
-        photoURL = res.body.image.link;
+        uploadPhotoId = res.body.image._id;
       })
       .catch((error) => {
         throw new Error(error);
@@ -72,6 +72,17 @@ describe("Upload Images", () => {
       })
       .catch((error) => {
         throw new Error(error);
+      });
+  });
+
+  it("Should delete an image with success.", () => {
+    return request
+      .delete(`/upload/${uploadPhotoId}`)
+      .then((res) => {
+        expect(res.statusCode).toBe(200);
+      })
+      .catch((err) => {
+        throw new Error(err);
       });
   });
 });

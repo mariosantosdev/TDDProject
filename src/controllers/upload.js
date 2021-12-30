@@ -23,6 +23,23 @@ function writeFileInFolder(file) {
   });
 }
 
+function deleteFileInFolder(filename) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const DestinationFolder = path.resolve(__dirname, "..", "..", "uploads");
+
+      if (!fs.existsSync(`${DestinationFolder}/${filename}`)) {
+        reject("File don't found.");
+      }
+
+      fs.unlinkSync(`${DestinationFolder}/${filename}`);
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 class UploadController {
   async upload(req, res) {
     try {
@@ -40,6 +57,20 @@ class UploadController {
       image.save();
 
       res.status(200).json({ image });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+
+  async delete(req, res) {
+    try {
+      const file = await UploadModel.findByIdAndRemove(req.params.id, {
+        new: true,
+      });
+      await deleteFileInFolder(file.filename);
+
+      res.status(200).send();
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
