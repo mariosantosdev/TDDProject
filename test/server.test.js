@@ -9,6 +9,6 @@ it("Should listen in port 3030", () => {
       expect(res.statusCode).toEqual(200);
     })
     .catch((error) => {
-      fail(error);
+      throw new Error(error);
     });
 });
