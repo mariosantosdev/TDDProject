@@ -61,4 +61,17 @@ describe("Upload Images", () => {
         throw new Error(error);
       });
   });
+
+  it("Should reject upload when not send JWT", () => {
+    return request
+      .post("/upload")
+      .attach("file", "test/assets/img.jpeg")
+      .then((res) => {
+        expect(res.statusCode).toBe(403);
+        expect(res.body.messageError).toBe("Token is missing.");
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  });
 });
