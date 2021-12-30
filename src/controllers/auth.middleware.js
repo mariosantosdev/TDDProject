@@ -21,6 +21,7 @@ class AuthMidleware {
         return res.status(403).json({ messageError: "Token is invalid." });
       }
 
+      req.userId = id;
       next();
     } catch (error) {
       res.status(500).send(error);
