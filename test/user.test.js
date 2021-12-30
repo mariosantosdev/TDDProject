@@ -4,13 +4,34 @@ const faker = require("faker");
 
 const request = supertest(app);
 
-describe("SignUp User", () => {
-  let name = faker.name.firstName();
-  let email = faker.internet.email();
-  let password = faker.internet.password();
-  let user = { name, email, password };
+const mainUser = {
+  name: "Mário Santos",
+  email: "mariosantos@email.com",
+  password: "123456",
+};
 
+beforeAll(() => {
+  return request
+    .post("/user")
+    .send(mainUser)
+    .then((res) => {})
+    .catch((error) => console.log(error));
+});
+
+afterAll(() => {
+  return request
+    .delete(`/user/${mainUser.email}`)
+    .then((res) => {})
+    .catch((error) => console.log(error));
+});
+
+describe("SignUp User", () => {
   it("Should sign up user with success", () => {
+    let name = faker.name.firstName();
+    let email = faker.internet.email();
+    let password = faker.internet.password();
+    let user = { name, email, password };
+
     return request
       .post("/user")
       .send(user)
@@ -26,7 +47,7 @@ describe("SignUp User", () => {
   it("Should prevent sign up clone user", () => {
     return request
       .post("/user")
-      .send(user)
+      .send(mainUser)
       .then((res) => {
         expect(res.statusCode).toEqual(400);
         expect(res.body.messageError).toEqual(
@@ -41,7 +62,7 @@ describe("SignUp User", () => {
   it("Should prevent sign up with empty 'name' field", () => {
     return request
       .post("/user")
-      .send({ email, password })
+      .send({ email: mainUser.email, password: mainUser.password })
       .then((res) => {
         expect(res.statusCode).toEqual(400);
         expect(res.body.messageError).toEqual('Field "Name" is missing.');
@@ -54,7 +75,7 @@ describe("SignUp User", () => {
   it("Should prevent sign up with empty 'email' field", () => {
     return request
       .post("/user")
-      .send({ name, password })
+      .send({ name: mainUser.name, password: mainUser.password })
       .then((res) => {
         expect(res.statusCode).toEqual(400);
         expect(res.body.messageError).toEqual('Field "Email" is missing.');
@@ -67,7 +88,7 @@ describe("SignUp User", () => {
   it("Should prevent sign up with empty 'password' field", () => {
     return request
       .post("/user")
-      .send({ email, name })
+      .send({ email: mainUser.email, name: mainUser.name })
       .then((res) => {
         expect(res.statusCode).toEqual(400);
         expect(res.body.messageError).toEqual('Field "Password" is missing.');

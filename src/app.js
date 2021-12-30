@@ -14,4 +14,6 @@ app.get("/", (req, res) => {
 
 app.post("/user", userController.signup);
 
+app.delete("/user/:email", userController._deleteUser);
+
 module.exports = app;

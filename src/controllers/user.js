@@ -40,6 +40,19 @@ class User {
       res.status(500).send(error);
     }
   }
+
+  async _deleteUser(req, res) {
+    try {
+      const email = req.params.email;
+
+      await UserModel.deleteOne({ email });
+
+      res.status(200);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
 }
 
 module.exports = new User();
