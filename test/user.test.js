@@ -152,4 +152,16 @@ describe("SignIn User", () => {
       });
   });
 
+  it("Should prevent sign in with invalid 'password'.", () => {
+    return request
+      .post("/auth")
+      .send({ email: mainUser.email, password: "invalidPassword" })
+      .then((res) => {
+        expect(res.statusCode).toBe(403);
+        expect(res.body.messageError).toEqual("Email or password is invalid.");
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  });
 });

@@ -60,7 +60,7 @@ class User {
           .json({ messageError: 'Field "Password" is missing.' });
       }
 
-      const user = await UserModel.findOne({ email });
+      const user = await UserModel.findOne({ email, password });
 
       if (!user) {
         return res
