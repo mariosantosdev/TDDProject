@@ -98,3 +98,18 @@ describe("SignUp User", () => {
       });
   });
 });
+
+describe("SignIn User", () => {
+  it("Should return a token when sign in is success.", () => {
+    return request
+      .post("/auth")
+      .send({ email: mainUser.email, password: mainUser.password })
+      .then((res) => {
+        expect(res.statusCode).toBe(200);
+        expect(res.body.token).toBeDefined();
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  });
+});

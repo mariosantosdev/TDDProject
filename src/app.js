@@ -16,4 +16,6 @@ app.post("/user", userController.signup);
 
 app.delete("/user/:email", userController._deleteUser);
 
+app.post("/auth", userController.signin);
+
 module.exports = app;

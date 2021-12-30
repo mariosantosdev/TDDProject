@@ -1,4 +1,7 @@
 const UserModel = require("../db/User");
+const jwt = require("jsonwebtoken");
+
+const JWT_SECRET = "dsakdjaisjdasmdkamdkasnuyhe127y3y217kdm3u1";
 
 class User {
   async signup(req, res) {
@@ -35,6 +38,19 @@ class User {
       await user.save();
 
       res.status(201).json(user);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+
+  async signin(req, res) {
+    try {
+      const { email, password } = req.body;
+
+      const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "48h" });
+
+      res.status(200).json({ token });
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
