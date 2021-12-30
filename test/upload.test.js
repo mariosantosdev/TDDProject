@@ -74,7 +74,9 @@ describe("Upload Images", () => {
         throw new Error(error);
       });
   });
+});
 
+describe("Delete Images", () => {
   it("Should delete an image with success.", () => {
     return request
       .delete(`/upload/${uploadPhotoId}`)
