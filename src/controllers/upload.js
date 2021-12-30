@@ -26,6 +26,10 @@ function writeFileInFolder(file) {
 class UploadController {
   async upload(req, res) {
     try {
+      if (!req.file) {
+        return res.status(400).json({ messageError: "File is missing." });
+      }
+
       const path = await writeFileInFolder(req.file);
 
       const image = new UploadModel({ userId: req.userId, link: path });

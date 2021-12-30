@@ -49,6 +49,13 @@ describe("Upload Images", () => {
       });
   });
 
+  it("Should reject upload when not send image", () => {
+    return request
+      .post("/upload")
+      .auth(token, { type: "bearer" })
+      .then((res) => {
+        expect(res.statusCode).toBe(400);
+        expect(res.body.messageError).toBe("File is missing.");
       })
       .catch((error) => {
         throw new Error(error);
