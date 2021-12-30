@@ -1,6 +1,5 @@
 const app = require("../src/app");
 const supertest = require("supertest");
-const faker = require("faker");
 
 const request = supertest(app);
 
@@ -11,6 +10,7 @@ const mainUser = {
 };
 
 let token = "kdaskda";
+let photoURL;
 
 beforeAll(async () => {
   try {
@@ -35,13 +35,20 @@ afterAll(() => {
 
 describe("Upload Images", () => {
   it("Should upload an image with success.", () => {
-    const file = faker.image.dataUri();
     return request
       .post("/upload")
       .auth(token, { type: "bearer" })
-      .send({ file })
+      .attach("file", "test/assets/img.jpeg")
       .then((res) => {
         expect(res.statusCode).toBe(200);
+        expect(res.body.image.link).toBeDefined();
+        photoURL = res.body.image.link;
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  });
+
       })
       .catch((error) => {
         throw new Error(error);
