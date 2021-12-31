@@ -100,4 +100,29 @@ describe("Delete Images", () => {
         throw new Error(err);
       });
   });
+
+  it("Should recuse delete an image of different user.", () => {
+    const localtoken =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkpvY2VseW4uSGF1Y2s5MkB5YWhvby5jb20iLCJuYW1lIjoiTWF5IiwiaWQiOiI2MWNlM2Y1YmM3N2VkZjVjZDZiYTZlYTciLCJpYXQiOjE2NDA5MTA2NjksImV4cCI6MTY0MTA4MzQ2OX0.IRC2JVYoLg0DbPcCVDG3wnGMc7CcbrQQfiAKEk0nyFw";
+
+    return request
+      .post("/upload")
+      .auth(token, { type: "bearer" })
+      .attach("file", "test/assets/img.jpeg")
+      .then((res) => {
+        return request
+          .delete(`/upload/${res.body.image._id}`)
+          .auth(localtoken, { type: "bearer" })
+          .then((res) => {
+            expect(res.statusCode).toBe(403);
+            expect(res.body.messageError).toBe("This upload is of other user.");
+          })
+          .catch((err) => {
+            throw new Error(err);
+          });
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  });
 });

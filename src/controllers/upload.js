@@ -29,7 +29,7 @@ function deleteFileInFolder(filename) {
       const DestinationFolder = path.resolve(__dirname, "..", "..", "uploads");
 
       if (!fs.existsSync(`${DestinationFolder}/${filename}`)) {
-        reject("File don't found.");
+        reject(`The file "${filename}" don't found. `);
       }
 
       fs.unlinkSync(`${DestinationFolder}/${filename}`);
@@ -65,9 +65,19 @@ class UploadController {
 
   async delete(req, res) {
     try {
-      const file = await UploadModel.findByIdAndRemove(req.params.id, {
-        new: true,
-      });
+      if (!req.params.id) {
+        return res.status(400).json({ messageError: "Field 'id' is missing." });
+      }
+
+      const file = await UploadModel.findById(req.params.id);
+
+      if (file.userId != req.userId) {
+        return res
+          .status(403)
+          .json({ messageError: "This upload is of other user." });
+      }
+
+      await UploadModel.findByIdAndDelete(req.params.id);
       await deleteFileInFolder(file.filename);
 
       res.status(200).send();
